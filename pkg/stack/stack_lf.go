@@ -8,7 +8,6 @@
 package stack
 
 import (
-	"sync/atomic"
 	"unsafe"
 )
 
@@ -23,54 +22,12 @@ type Stack[T any] struct {
 }
 
 // NewStack creates a new lock-free queue.
-func NewLockFreeStack[T any]() *Stack[T] {
-	return &Stack[T]{}
-}
+func NewLockFreeStack[T any]() *Stack[T] { _ = "STUB: not implemented"; return nil }
 
-func getZero[T any]() T {
-	var result T
-
-	return result
-}
+func getZero[T any]() T { _ = "STUB: not implemented"; return *new(T) }
 
 // Pop pops value from the top of the stack.
-func (s *Stack[T]) Pop() T {
-	var (
-		top, next unsafe.Pointer
-		item      *node[T]
-	)
-
-	for {
-		top = atomic.LoadPointer(&s.top)
-		if top == nil {
-			return getZero[T]()
-		}
-		item = (*node[T])(top)
-		next = atomic.LoadPointer(&item.next)
-
-		if atomic.CompareAndSwapPointer(&s.top, top, next) {
-			atomic.AddUint64(&s.len, ^uint64(0))
-
-			return item.value
-		}
-	}
-}
+func (s *Stack[T]) Pop() T { _ = "STUB: not implemented"; return *new(T) }
 
 // Push pushes a value on top of the stack.
-func (s *Stack[T]) Push(v T) {
-	var (
-		item = node[T]{value: v}
-		top  unsafe.Pointer
-	)
-
-	for {
-		top = atomic.LoadPointer(&s.top)
-		item.next = top
-
-		if atomic.CompareAndSwapPointer(&s.top, top, unsafe.Pointer(&item)) {
-			atomic.AddUint64(&s.len, 1)
-
-			return
-		}
-	}
-}
+func (s *Stack[T]) Push(v T) { _ = "STUB: not implemented"; return }

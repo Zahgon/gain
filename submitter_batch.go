@@ -15,12 +15,8 @@
 package gain
 
 import (
-	"errors"
-	"fmt"
 	"syscall"
-	"time"
 
-	gainErrors "github.com/pawelgaczynski/gain/pkg/errors"
 	"github.com/pawelgaczynski/giouring"
 )
 
@@ -53,48 +49,8 @@ type batchSubmitter struct {
 	waitFor         uint32
 }
 
-func (s *batchSubmitter) submit() error {
-	_, err := s.ring.SubmitAndWaitTimeout(s.waitFor, &s.timeoutTimeSpec, nil)
-	if errors.Is(err, syscall.EAGAIN) || errors.Is(err, syscall.EINTR) ||
-		errors.Is(err, syscall.ETIME) {
-		if s.waitForIndex != 0 {
-			s.waitForIndex--
-			s.waitFor = waitForArray[s.waitForIndex]
-		}
+func (s *batchSubmitter) submit() error { _ = "STUB: not implemented"; return nil }
 
-		return gainErrors.ErrSkippable
-	}
+func (s *batchSubmitter) advance(n uint32) { _ = "STUB: not implemented"; return }
 
-	if err != nil {
-		return fmt.Errorf("submitAndWaitTimeout error: %w", err)
-	}
-
-	return nil
-}
-
-func (s *batchSubmitter) advance(n uint32) {
-	s.ring.CQAdvance(n)
-
-	var (
-		index           uint32
-		lenWaitForArray = uint32(len(waitForArray))
-	)
-
-	for index = 1; index < lenWaitForArray; index++ {
-		if waitForArray[index] > n {
-			break
-		}
-		s.waitForIndex = index
-	}
-	s.waitFor = waitForArray[s.waitForIndex]
-}
-
-func newBatchSubmitter(ring *giouring.Ring) *batchSubmitter {
-	submitter := &batchSubmitter{
-		ring:            ring,
-		timeoutTimeSpec: syscall.NsecToTimespec((time.Millisecond).Nanoseconds()),
-	}
-	submitter.waitFor = waitForArray[submitter.waitForIndex]
-
-	return submitter
-}
+func newBatchSubmitter(ring *giouring.Ring) *batchSubmitter { _ = "STUB: not implemented"; return nil }

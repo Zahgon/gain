@@ -16,7 +16,6 @@ package sync
 
 import (
 	"sync"
-	"sync/atomic"
 )
 
 type Pool[T any] interface {
@@ -29,30 +28,10 @@ type pool[T any] struct {
 	count        int64
 }
 
-func getZero[T any]() T {
-	var result T
+func getZero[T any]() T { _ = "STUB: not implemented"; return *new(T) }
 
-	return result
-}
+func (p *pool[T]) Get() T { _ = "STUB: not implemented"; return *new(T) }
 
-func (p *pool[T]) Get() T {
-	val, ok := p.internalPool.Get().(T)
-	if !ok {
-		return getZero[T]()
-	}
+func (p *pool[T]) Put(value T) { _ = "STUB: not implemented"; return }
 
-	atomic.AddInt64(&p.count, -1)
-
-	return val
-}
-
-func (p *pool[T]) Put(value T) {
-	p.internalPool.Put(value)
-	atomic.AddInt64(&p.count, 1)
-}
-
-func NewPool[T any]() Pool[T] {
-	return &pool[T]{
-		internalPool: sync.Pool{},
-	}
-}
+func NewPool[T any]() Pool[T] { _ = "STUB: not implemented"; return nil }

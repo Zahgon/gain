@@ -17,10 +17,7 @@ package gain
 import (
 	"net"
 	"syscall"
-	"unsafe"
 
-	"github.com/pawelgaczynski/gain/pkg/errors"
-	"github.com/pawelgaczynski/gain/pkg/socket"
 	"github.com/pawelgaczynski/giouring"
 )
 
@@ -32,46 +29,16 @@ type acceptor struct {
 	connectionManager *connectionManager
 }
 
-func (a *acceptor) addAcceptRequest() error {
-	entry := a.ring.GetSQE()
-	if entry == nil {
-		return errors.ErrGettingSQE
-	}
+func (a *acceptor) addAcceptRequest() error { _ = "STUB: not implemented"; return nil }
 
-	entry.PrepareAccept(
-		a.fd, uintptr(unsafe.Pointer(a.clientAddr)), uint64(uintptr(unsafe.Pointer(a.clientLenPointer))), 0)
-	entry.UserData = acceptDataFlag | uint64(a.fd)
-
-	return nil
-}
-
-func (a *acceptor) addAcceptConnRequest() error {
-	err := a.addAcceptRequest()
-	if err != nil {
-		return err
-	}
-
-	conn := a.connectionManager.getFd(a.fd)
-	conn.state = connAccept
-
-	return nil
-}
+func (a *acceptor) addAcceptConnRequest() error { _ = "STUB: not implemented"; return nil }
 
 func (a *acceptor) lastClientAddr() (net.Addr, error) {
-	addr, err := anyToSockaddr(a.clientAddr)
-	if err != nil {
-		return nil, err
-	}
-
-	return socket.SockaddrToTCPOrUnixAddr(addr), nil
+	_ = "STUB: not implemented"
+	return *new(net.Addr), nil
 }
 
 func newAcceptor(ring *giouring.Ring, connectionManager *connectionManager) *acceptor {
-	acceptor := &acceptor{
-		ring:              ring,
-		connectionManager: connectionManager,
-	}
-	acceptor.clientAddr, acceptor.clientLenPointer = createClientAddr()
-
-	return acceptor
+	_ = "STUB: not implemented"
+	return nil
 }

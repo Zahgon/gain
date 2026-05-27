@@ -15,7 +15,6 @@
 package gain
 
 import (
-	"github.com/pawelgaczynski/gain/pkg/errors"
 	"github.com/pawelgaczynski/giouring"
 )
 
@@ -25,36 +24,8 @@ type writer struct {
 }
 
 func (w *writer) addWriteRequest(conn *connection, link bool) error {
-	entry := w.ring.GetSQE()
-	if entry == nil {
-		return errors.ErrGettingSQE
-	}
-
-	if w.sendMsg {
-		entry.PrepareSendMsg(conn.fd, conn.msgHdr, 0)
-		entry.UserData = writeDataFlag | uint64(conn.key)
-	} else {
-		entry.PrepareSend(
-			conn.fd,
-			uintptr(conn.outboundReadAddress()),
-			uint32(conn.outboundBuffer.Buffered()),
-			0)
-		entry.UserData = writeDataFlag | uint64(conn.fd)
-	}
-
-	if link {
-		entry.Flags |= giouring.SqeIOLink
-	}
-
-	conn.state = connWrite
-	conn.setKernelSpace()
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func newWriter(ring *giouring.Ring, sendMsg bool) *writer {
-	return &writer{
-		ring:    ring,
-		sendMsg: sendMsg,
-	}
-}
+func newWriter(ring *giouring.Ring, sendMsg bool) *writer { _ = "STUB: not implemented"; return nil }

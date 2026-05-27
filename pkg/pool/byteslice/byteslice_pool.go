@@ -16,10 +16,6 @@
 package byteslice
 
 import (
-	"math"
-	"math/bits"
-	"reflect"
-	"runtime"
 	"unsafe"
 
 	"github.com/pawelgaczynski/gain/pkg/pool/sync"
@@ -33,66 +29,21 @@ type Pool struct {
 }
 
 // Get returns a byte slice with given length from the built-in pool.
-func Get(size int) []byte {
-	return builtinPool.Get(size)
-}
+func Get(size int) []byte { _ = "STUB: not implemented"; return nil }
 
 // Put returns the byte slice to the built-in pool.
-func Put(buf []byte) {
-	builtinPool.Put(buf)
-}
+func Put(buf []byte) { _ = "STUB: not implemented"; return }
 
 // Get retrieves a byte slice of the length requested by the caller from pool or allocates a new one.
-func (p *Pool) Get(size int) []byte {
-	if size <= 0 {
-		return nil
-	}
-
-	if size > math.MaxInt32 {
-		return make([]byte, size)
-	}
-	idx := index(uint32(size))
-
-	ptr := p.pools[idx].Get()
-	if ptr == nil {
-		return make([]byte, 1<<idx)[:size]
-	}
-
-	var buf []byte
-	sh := (*reflect.SliceHeader)(unsafe.Pointer(&buf))
-	sh.Data = uintptr(ptr)
-	sh.Len = size
-	sh.Cap = 1 << idx
-
-	runtime.KeepAlive(ptr)
-
-	return buf
-}
+func (p *Pool) Get(size int) []byte { _ = "STUB: not implemented"; return nil }
 
 // Put returns the byte slice to the pool.
-func (p *Pool) Put(buf []byte) {
-	size := cap(buf)
-	if size == 0 || size > math.MaxInt32 {
-		return
-	}
+func (p *Pool) Put(buf []byte) { _ = "STUB: not implemented"; return }
 
-	idx := index(uint32(size))
-	if size != 1<<idx { // this byte slice is not from Pool.Get(), put it into the previous interval of idx
-		idx--
-	}
-	// array pointer
-	p.pools[idx].Put(unsafe.Pointer(&buf[:1][0]))
-}
+// this byte slice is not from Pool.Get(), put it into the previous interval of idx
 
-func index(n uint32) uint32 {
-	return uint32(bits.Len32(n - 1))
-}
+// array pointer
 
-func NewByteSlicePool() Pool {
-	var byteSlicePool Pool
-	for i := range byteSlicePool.pools {
-		byteSlicePool.pools[i] = sync.NewPool[unsafe.Pointer]()
-	}
+func index(n uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
-	return byteSlicePool
-}
+func NewByteSlicePool() Pool { _ = "STUB: not implemented"; return *new(Pool) }

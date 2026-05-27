@@ -15,22 +15,15 @@
 package virtualmem
 
 import (
-	"fmt"
-	"log"
-	"math"
 	"os"
-	"reflect"
-	"runtime"
-	"syscall"
-	"unsafe"
-
-	"golang.org/x/sys/unix"
 )
 
 var pageSize = os.Getpagesize()
 
 func doubleSize(size int) int {
-	return size * 2 //nolint:gomnd // skip gomnd linter since this method is self-documented
+	_ = "STUB: not implemented"
+	//nolint:gomnd // skip gomnd linter since this method is self-documented
+	return 0
 }
 
 type VirtualMem struct {
@@ -38,104 +31,19 @@ type VirtualMem struct {
 	Size int
 }
 
-func (m *VirtualMem) Zeroes() {
-	for j := 0; j < m.Size; j++ {
-		m.Buf[j] = 0
-	}
-}
+func (m *VirtualMem) Zeroes() { _ = "STUB: not implemented"; return }
 
-func NewVirtualMem(size int) *VirtualMem {
-	vm := &VirtualMem{
-		Size: size,
-		Buf:  allocateBuffer(size),
-	}
-	runtime.SetFinalizer(vm, func(vm *VirtualMem) {
-		err := internalMunmap(uintptr(unsafe.Pointer(&vm.Buf[0])), doubleSize(vm.Size))
-		if err != nil {
-			log.Panic(err)
-		}
-	})
+func NewVirtualMem(size int) *VirtualMem { _ = "STUB: not implemented"; return nil }
 
-	return vm
-}
+func AdjustBufferSize(size int) int { _ = "STUB: not implemented"; return 0 }
 
-func AdjustBufferSize(size int) int {
-	adjustedSize := math.Ceil((float64(size) / float64(pageSize))) * float64(pageSize)
+func allocateBuffer(size int) []byte { _ = "STUB: not implemented"; return nil }
 
-	return int(adjustedSize)
-}
-
-func allocateBuffer(size int) []byte {
-	nofd := ^uintptr(0)
-
-	vaddr, err := internalMmap(0, doubleSize(size), syscall.MAP_SHARED|syscall.MAP_ANONYMOUS, nofd)
-	if err != nil {
-		log.Panic(err)
-	}
-
-	fileDescriptor, err := unix.MemfdCreate("magicbuffer", 0)
-	if err != nil {
-		log.Panic(err)
-	}
-
-	err = unix.Ftruncate(fileDescriptor, int64(size))
-	if err != nil {
-		log.Panic(err)
-	}
-
-	fd := uintptr(fileDescriptor)
-
-	_, err = internalMmap(vaddr, size, syscall.MAP_SHARED|syscall.MAP_FIXED, fd)
-	if err != nil {
-		log.Panic(fmt.Errorf("first internal mmap failed: %w", err))
-	}
-
-	_, err = internalMmap(
-		vaddr+uintptr(size), size, syscall.MAP_SHARED|syscall.MAP_FIXED, fd)
-	if err != nil {
-		log.Panic(fmt.Errorf("second internal mmap failed: %w", err))
-	}
-
-	syscall.Close(fileDescriptor)
-
-	sliceHeader := reflect.SliceHeader{
-		Data: vaddr,
-		Len:  doubleSize(size),
-		Cap:  doubleSize(size),
-	}
-
-	buf := *(*[]byte)(unsafe.Pointer(&sliceHeader)) //nolint:govet // it is perfectly inteded use
-
-	return buf
-}
+//nolint:govet // it is perfectly inteded use
 
 func internalMmap(addr uintptr, length, flags int, fd uintptr) (uintptr, error) {
-	result, _, err := syscall.Syscall6(
-		syscall.SYS_MMAP,
-		addr,
-		uintptr(length),
-		uintptr(syscall.PROT_READ|syscall.PROT_WRITE),
-		uintptr(flags),
-		fd,
-		uintptr(0),
-	)
-	if err != 0 {
-		return 0, os.NewSyscallError("internalMMap error", err)
-	}
-
-	return result, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func internalMunmap(addr uintptr, length int) error {
-	_, _, err := syscall.Syscall(
-		syscall.SYS_MUNMAP,
-		addr,
-		uintptr(length),
-		0,
-	)
-	if err != 0 {
-		return os.NewSyscallError("internalMunmap error", err)
-	}
-
-	return nil
-}
+func internalMunmap(addr uintptr, length int) error { _ = "STUB: not implemented"; return nil }

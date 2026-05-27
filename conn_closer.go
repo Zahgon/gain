@@ -15,10 +15,6 @@
 package gain
 
 import (
-	"os"
-	"syscall"
-
-	"github.com/pawelgaczynski/gain/pkg/errors"
 	"github.com/pawelgaczynski/giouring"
 	"github.com/rs/zerolog"
 )
@@ -29,34 +25,21 @@ type connCloser struct {
 }
 
 func (c *connCloser) addCloseRequest(fd int) (*giouring.SubmissionQueueEntry, error) {
-	entry := c.ring.GetSQE()
-	if entry == nil {
-		return nil, errors.ErrGettingSQE
-	}
-
-	entry.PrepareClose(fd)
-	entry.UserData = closeConnFlag | uint64(fd)
-
-	return entry, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *connCloser) addCloseConnRequest(conn *connection) error {
-	_, err := c.addCloseRequest(conn.fd)
-	if err != nil {
-		return err
-	}
-	conn.state = connClose
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (c *connCloser) syscallCloseSocket(fileDescriptor int) error {
-	return os.NewSyscallError("shutdown", syscall.Shutdown(fileDescriptor, syscall.SHUT_RDWR))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func newConnCloser(ring *giouring.Ring, logger zerolog.Logger) *connCloser {
-	return &connCloser{
-		ring:   ring,
-		logger: logger,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }

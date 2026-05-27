@@ -15,10 +15,6 @@
 package gain
 
 import (
-	"errors"
-	"runtime"
-
-	gainErrors "github.com/pawelgaczynski/gain/pkg/errors"
 	"github.com/pawelgaczynski/giouring"
 )
 
@@ -40,100 +36,20 @@ type looper struct {
 }
 
 func (l *looper) innerLoop(eventProcessor eventProcessor) error {
-	var err error
-	cqes := make([]*giouring.CompletionQueueEvent, l.maxCQEvents)
-
-	for {
-		if continueLoop := l.shutdownHandler(); !continueLoop {
-			return nil
-		}
-
-		if err = l.submit(); err != nil {
-			if errors.Is(err, gainErrors.ErrSkippable) {
-				if l.loopFinisher != nil {
-					l.loopFinisher()
-				}
-
-				if l.loopFinishCondition != nil && l.loopFinishCondition() {
-					return nil
-				}
-
-				continue
-			}
-
-			return err
-		}
-		numberOfCQEs := l.ring.PeekBatchCQE(cqes)
-
-		var i uint32
-		for i = 0; i < numberOfCQEs; i++ {
-			cqe := cqes[i]
-
-			err = eventProcessor(cqe)
-			if err != nil {
-				l.advance(i + 1)
-
-				return err
-			}
-		}
-		l.advance(numberOfCQEs)
-
-		if l.loopFinisher != nil {
-			l.loopFinisher()
-		}
-
-		if l.loopFinishCondition != nil && l.loopFinishCondition() {
-			return nil
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (l *looper) startLoop(index int, eventProcessor eventProcessor) error {
-	var err error
-	if l.processPriority {
-		err = setProcessPriority()
-		if err != nil {
-			return err
-		}
-	}
-
-	if l.cpuAffinity {
-		err = setCPUAffinity(index)
-		if err != nil {
-			return err
-		}
-
-		runtime.LockOSThread()
-		defer runtime.UnlockOSThread()
-	}
-
-	if l.prepareHandler != nil {
-		err = l.prepareHandler()
-		if err != nil {
-			return err
-		}
-	}
-
-	if l.startListener != nil {
-		l.running = true
-		l.startListener()
-	}
-
-	return l.innerLoop(eventProcessor)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (l *looper) started() bool {
-	return l.running
-}
+func (l *looper) started() bool { _ = "STUB: not implemented"; return false }
 
 func newLooper(
 	ring *giouring.Ring, cpuAffinity bool, processPriority bool, maxCQEvents int,
 ) *looper {
-	return &looper{
-		submitter:       newBatchSubmitter(ring),
-		ring:            ring,
-		cpuAffinity:     cpuAffinity,
-		processPriority: processPriority,
-		maxCQEvents:     maxCQEvents,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }

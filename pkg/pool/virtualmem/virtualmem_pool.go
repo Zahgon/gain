@@ -15,8 +15,6 @@
 package virtualmem
 
 import (
-	"math/bits"
-
 	"github.com/pawelgaczynski/gain/pkg/pool/sync"
 )
 
@@ -26,63 +24,23 @@ const (
 
 var builtinPool = NewPool()
 
-func Get(size int) *VirtualMem {
-	return builtinPool.Get(size)
-}
+func Get(size int) *VirtualMem { _ = "STUB: not implemented"; return nil }
 
 // Put returns the virtual memory to the built-in pool.
-func Put(mem *VirtualMem) {
-	mem.Zeroes()
-	builtinPool.Put(mem)
-}
+func Put(mem *VirtualMem) { _ = "STUB: not implemented"; return }
 
 // Get retrieves a byte slice of the length requested by the caller from pool or allocates a new one.
-func (p *Pool) Get(size int) *VirtualMem {
-	if size <= 0 {
-		return nil
-	}
-	size = AdjustBufferSize(size)
-
-	if size > maxVMSize {
-		return NewVirtualMem(size)
-	}
-	idx := index(uint32(size))
-
-	ptr := p.pools[idx].Get()
-	if ptr == nil {
-		return NewVirtualMem(size)
-	}
-
-	return ptr
-}
+func (p *Pool) Get(size int) *VirtualMem { _ = "STUB: not implemented"; return nil }
 
 // Put returns the virtual memory to the pool.
-func (p *Pool) Put(mem *VirtualMem) {
-	if mem.Size < pageSize || mem.Size > maxVMSize {
-		return
-	}
+func (p *Pool) Put(mem *VirtualMem) { _ = "STUB: not implemented"; return }
 
-	idx := index(uint32(mem.Size))
-	if mem.Size != 1<<idx { // this byte slice is not from Pool.Get(), put it into the previous interval of idx
-		idx--
-	}
+// this byte slice is not from Pool.Get(), put it into the previous interval of idx
 
-	p.pools[idx].Put(mem)
-}
-
-func index(n uint32) uint32 {
-	return uint32(bits.Len32(n - 1))
-}
+func index(n uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
 type Pool struct {
 	pools [32]sync.Pool[*VirtualMem]
 }
 
-func NewPool() Pool {
-	var pool Pool
-	for i := range pool.pools {
-		pool.pools[i] = sync.NewPool[*VirtualMem]()
-	}
-
-	return pool
-}
+func NewPool() Pool { _ = "STUB: not implemented"; return *new(Pool) }

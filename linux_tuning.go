@@ -14,33 +14,6 @@
 
 package gain
 
-import (
-	"fmt"
-	"os"
-	"runtime"
-	"syscall"
+func setProcessPriority() error { _ = "STUB: not implemented"; return nil }
 
-	"golang.org/x/sys/unix"
-)
-
-func setProcessPriority() error {
-	pid := os.Getpid()
-
-	return os.NewSyscallError("setpriority", syscall.Setpriority(syscall.PRIO_PROCESS, pid, -19))
-}
-
-func setCPUAffinity(index int) error {
-	var newMask unix.CPUSet
-
-	newMask.Zero()
-
-	cpuIndex := (index) % (runtime.NumCPU())
-	newMask.Set(cpuIndex)
-
-	err := unix.SchedSetaffinity(0, &newMask)
-	if err != nil {
-		return fmt.Errorf("SchedSetaffinity: %w, %v", err, newMask)
-	}
-
-	return nil
-}
+func setCPUAffinity(index int) error { _ = "STUB: not implemented"; return nil }

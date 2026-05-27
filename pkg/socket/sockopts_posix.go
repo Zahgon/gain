@@ -16,14 +16,7 @@
 package socket
 
 import (
-	"fmt"
 	"net"
-	"os"
-	"syscall"
-
-	"github.com/pawelgaczynski/gain/pkg/errors"
-	gainNet "github.com/pawelgaczynski/gain/pkg/net"
-	"golang.org/x/sys/unix"
 )
 
 // SetNoDelay controls whether the operating system should delay
@@ -31,48 +24,32 @@ import (
 //
 // The default is true (no delay), meaning that data is
 // sent as soon as possible after a Write.
-func SetNoDelay(fd, noDelay int) error {
-	return os.NewSyscallError("setsockopt", unix.SetsockoptInt(fd, unix.IPPROTO_TCP, unix.TCP_NODELAY, noDelay))
-}
+func SetNoDelay(fd, noDelay int) error { _ = "STUB: not implemented"; return nil }
 
 // SetRecvBuffer sets the size of the operating system's
 // receive buffer associated with the connection.
-func SetRecvBuffer(fd, size int) error {
-	return os.NewSyscallError("setsockopt", unix.SetsockoptInt(fd, unix.SOL_SOCKET, unix.SO_RCVBUF, size))
-}
+func SetRecvBuffer(fd, size int) error { _ = "STUB: not implemented"; return nil }
 
 // SetSendBuffer sets the size of the operating system's
 // transmit buffer associated with the connection.
-func SetSendBuffer(fd, size int) error {
-	return os.NewSyscallError("setsockopt", unix.SetsockoptInt(fd, unix.SOL_SOCKET, unix.SO_SNDBUF, size))
-}
+func SetSendBuffer(fd, size int) error { _ = "STUB: not implemented"; return nil }
 
 // SetReuseport enables SO_REUSEPORT option on socket.
-func SetReuseport(fd, reusePort int) error {
-	return os.NewSyscallError("setsockopt", unix.SetsockoptInt(fd, unix.SOL_SOCKET, unix.SO_REUSEPORT, reusePort))
-}
+func SetReuseport(fd, reusePort int) error { _ = "STUB: not implemented"; return nil }
 
 // SetReuseAddr enables SO_REUSEADDR option on socket.
-func SetReuseAddr(fd, reuseAddr int) error {
-	return os.NewSyscallError("setsockopt", unix.SetsockoptInt(fd, unix.SOL_SOCKET, unix.SO_REUSEADDR, reuseAddr))
-}
+func SetReuseAddr(fd, reuseAddr int) error { _ = "STUB: not implemented"; return nil }
 
 // SetIPv6Only restricts a IPv6 socket to only process IPv6 requests or both IPv4 and IPv6 requests.
-func SetIPv6Only(fd, ipv6only int) error {
-	return os.NewSyscallError("setsockopt", unix.SetsockoptInt(fd, unix.IPPROTO_IPV6, unix.IPV6_V6ONLY, ipv6only))
-}
+func SetIPv6Only(fd, ipv6only int) error { _ = "STUB: not implemented"; return nil }
 
 // SetQuickAck controls quickack mode on socket.
 // If quickack mode, acks are sent immediately, rather than delayed if needed in accordance to normal TCP operation.
-func SetQuickAck(fd, enabled int) error {
-	return os.NewSyscallError("setsockopt", unix.SetsockoptInt(fd, unix.IPPROTO_TCP, unix.TCP_QUICKACK, enabled))
-}
+func SetQuickAck(fd, enabled int) error { _ = "STUB: not implemented"; return nil }
 
 // SetFastOpen enables TCP_FASTOPEN on socket which allow to send and accept data in the opening SYN packet.
 // https://sysctl-explorer.net/net/ipv4/tcp_fastopen/
-func SetFastOpen(fd, enabled int) error {
-	return os.NewSyscallError("setsockopt", unix.SetsockoptInt(fd, unix.IPPROTO_TCP, unix.TCP_FASTOPEN, enabled))
-}
+func SetFastOpen(fd, enabled int) error { _ = "STUB: not implemented"; return nil }
 
 // SetLinger sets the behavior of Close on a connection which still
 // has data waiting to be sent or to be acknowledged.
@@ -86,41 +63,13 @@ func SetFastOpen(fd, enabled int) error {
 // If sec > 0, the data is sent in the background as with sec < 0. On
 // some operating systems after sec seconds have elapsed any remaining
 // unsent data may be discarded.
-func SetLinger(fd, sec int) error {
-	var linger unix.Linger
-	if sec >= 0 {
-		linger.Onoff = 1
-		linger.Linger = int32(sec)
-	} else {
-		linger.Onoff = 0
-		linger.Linger = 0
-	}
-
-	return os.NewSyscallError("setsockopt", unix.SetsockoptLinger(fd, syscall.SOL_SOCKET, syscall.SO_LINGER, &linger))
-}
+func SetLinger(fd, sec int) error { _ = "STUB: not implemented"; return nil }
 
 // SetMulticastMembership returns with a socket option function based on the IP
 // version. Returns nil when multicast membership cannot be applied.
 func SetMulticastMembership(proto string, udpAddr *net.UDPAddr) func(int, int) error {
-	udpVersion, err := determineUDPProto(proto, udpAddr)
-	if err != nil {
-		return nil
-	}
-
-	switch udpVersion {
-	case gainNet.UDP4:
-		return func(fd int, ifIndex int) error {
-			return SetIPv4MulticastMembership(fd, udpAddr.IP, ifIndex)
-		}
-
-	case gainNet.UDP6:
-		return func(fd int, ifIndex int) error {
-			return SetIPv6MulticastMembership(fd, udpAddr.IP, ifIndex)
-		}
-
-	default:
-		return nil
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetIPv4MulticastMembership joins fd to the specified multicast IPv4 address.
@@ -128,31 +77,9 @@ func SetMulticastMembership(proto string, udpAddr *net.UDPAddr) func(int, int) e
 // received. If ifIndex is 0 then the operating system will choose the default,
 // it is usually needed when the host has multiple network interfaces configured.
 func SetIPv4MulticastMembership(fd int, mcast net.IP, ifIndex int) error {
+	_ = "STUB: not implemented"
 	// Multicast interfaces are selected by IP address on IPv4 (and by index on IPv6)
-	ip, err := interfaceFirstIPv4Addr(ifIndex)
-	if err != nil {
-		return err
-	}
-
-	mreq := &unix.IPMreq{}
-	copy(mreq.Multiaddr[:], mcast.To4())
-	copy(mreq.Interface[:], ip.To4())
-
-	if ifIndex > 0 {
-		if err = os.NewSyscallError(
-			"setsockopt", unix.SetsockoptInet4Addr(fd, syscall.IPPROTO_IP, syscall.IP_MULTICAST_IF, mreq.Interface),
-		); err != nil {
-			return err
-		}
-	}
-
-	if err = os.NewSyscallError(
-		"setsockopt", unix.SetsockoptByte(fd, syscall.IPPROTO_IP, syscall.IP_MULTICAST_LOOP, 0),
-	); err != nil {
-		return err
-	}
-
-	return os.NewSyscallError("setsockopt", unix.SetsockoptIPMreq(fd, syscall.IPPROTO_IP, syscall.IP_ADD_MEMBERSHIP, mreq))
+	return nil
 }
 
 // SetIPv6MulticastMembership joins fd to the specified multicast IPv6 address.
@@ -160,57 +87,12 @@ func SetIPv4MulticastMembership(fd int, mcast net.IP, ifIndex int) error {
 // received. If ifIndex is 0 then the operating system will choose the default,
 // it is usually needed when the host has multiple network interfaces configured.
 func SetIPv6MulticastMembership(fd int, mcast net.IP, ifIndex int) error {
-	mreq := &unix.IPv6Mreq{}
-	mreq.Interface = uint32(ifIndex)
-	copy(mreq.Multiaddr[:], mcast.To16())
-
-	if ifIndex > 0 {
-		if err := os.NewSyscallError(
-			"setsockopt", unix.SetsockoptInt(fd, syscall.IPPROTO_IPV6, syscall.IPV6_MULTICAST_IF, ifIndex),
-		); err != nil {
-			return err
-		}
-	}
-
-	if err := os.NewSyscallError(
-		"setsockopt", unix.SetsockoptInt(fd, syscall.IPPROTO_IPV6, syscall.IPV6_MULTICAST_LOOP, 0),
-	); err != nil {
-		return err
-	}
-
-	return os.NewSyscallError(
-		"setsockopt", unix.SetsockoptIPv6Mreq(fd, syscall.IPPROTO_IPV6, syscall.IPV6_JOIN_GROUP, mreq),
-	)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // interfaceFirstIPv4Addr returns the first IPv4 address of the interface.
 func interfaceFirstIPv4Addr(ifIndex int) (net.IP, error) {
-	if ifIndex == 0 {
-		return net.IP([]byte{0, 0, 0, 0}), nil
-	}
-
-	iface, err := net.InterfaceByIndex(ifIndex)
-	if err != nil {
-		return nil, fmt.Errorf("interface by index error: %w", err)
-	}
-
-	addrs, err := iface.Addrs()
-	if err != nil {
-		return nil, fmt.Errorf("get addrs error: %w", err)
-	}
-
-	for _, addr := range addrs {
-		var ip net.IP
-
-		ip, _, err = net.ParseCIDR(addr.String())
-		if err != nil {
-			return nil, fmt.Errorf("parse CIDR error: %w", err)
-		}
-
-		if ip.To4() != nil {
-			return ip, nil
-		}
-	}
-
-	return nil, errors.ErrNoIPv4AddressOnInterface
+	_ = "STUB: not implemented"
+	return *new(net.IP), nil
 }

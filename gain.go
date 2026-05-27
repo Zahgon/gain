@@ -15,10 +15,6 @@
 //nolint:revive
 package gain
 
-import (
-	"github.com/pkg/errors"
-)
-
 type EventHandler interface {
 	// OnStart fires when the server is ready for accepting new connections.
 	OnStart(server Server)
@@ -43,16 +39,19 @@ type EventHandler interface {
 // Compose it with your own implementation of EventHandler and you won't need to implement all callbacks.
 type DefaultEventHandler struct{}
 
-func (e DefaultEventHandler) OnStart(server Server)     {}
-func (e DefaultEventHandler) OnAccept(c Conn)           {}
-func (e DefaultEventHandler) OnClose(c Conn, err error) {}
-func (e DefaultEventHandler) OnRead(c Conn, n int)      {}
-func (e DefaultEventHandler) OnWrite(c Conn, n int)     {}
+func (e DefaultEventHandler) OnStart(server Server)     { _ = "STUB: not implemented"; return }
+func (e DefaultEventHandler) OnAccept(c Conn)           { _ = "STUB: not implemented"; return }
+func (e DefaultEventHandler) OnClose(c Conn, err error) { _ = "STUB: not implemented"; return }
+func (e DefaultEventHandler) OnRead(c Conn, n int)      { _ = "STUB: not implemented"; return }
+func (e DefaultEventHandler) OnWrite(c Conn, n int) {
+	_ = "STUB: not implemented"
 
-// ListenAndServe starts a server with a given address and event handler.
-// The server can be configured with additional options.
+	// ListenAndServe starts a server with a given address and event handler.
+	// The server can be configured with additional options.
+	return
+}
+
 func ListenAndServe(address string, eventHandler EventHandler, options ...ConfigOption) error {
-	server := NewServer(eventHandler, NewConfig(options...))
-
-	return errors.Wrapf(server.Start(address), "starting server error")
+	_ = "STUB: not implemented"
+	return nil
 }

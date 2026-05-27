@@ -26,20 +26,11 @@ var member void
 const uint64Size = 64
 
 func createClientAddr() (*syscall.RawSockaddrAny, *uint32) {
-	clientAddrLen := new(uint32)
-	clientAddr := &syscall.RawSockaddrAny{}
-	*clientAddrLen = syscall.SizeofSockaddrAny
-
-	return clientAddr, clientAddrLen
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 //go:linkname anyToSockaddr syscall.anyToSockaddr
 func anyToSockaddr(rsa *syscall.RawSockaddrAny) (syscall.Sockaddr, error)
 
-func boolToInt(b bool) int {
-	if b {
-		return 1
-	}
-
-	return 0
-}
+func boolToInt(b bool) int { _ = "STUB: not implemented"; return 0 }

@@ -164,9 +164,7 @@ var flags = []cli.Flag{
 	},
 }
 
-func getHTTPLastLine() []byte {
-	return []byte("\r\nContent-Length: 13\r\n\r\nHello, World!")
-}
+func getHTTPLastLine() []byte { _ = "STUB: not implemented"; return nil }
 
 var (
 	httpFirstLine = []byte("HTTP/1.1 200 OK\r\nServer: gain\r\nContent-Type: text/plain\r\nDate: ")
@@ -175,56 +173,23 @@ var (
 
 var now atomic.Value
 
-func ticktock() {
-	now.Store(nowTimeFormat())
+func ticktock() { _ = "STUB: not implemented"; return }
 
-	for range time.Tick(time.Second) {
-		now.Store(nowTimeFormat())
-	}
-}
+func NowTimeFormat() string { _ = "STUB: not implemented"; return "" }
 
-func NowTimeFormat() string {
-	return now.Load().(string)
-}
-
-func nowTimeFormat() string {
-	return time.Now().Format("Mon, 02 Jan 2006 15:04:05 GMT")
-}
+func nowTimeFormat() string { _ = "STUB: not implemented"; return "" }
 
 type EchoHandler struct {
 	gain.DefaultEventHandler
 }
 
-func (h EchoHandler) OnRead(c gain.Conn, n int) {
-	buf, _ := c.Next(n)
-	_, _ = c.Write(buf)
-}
+func (h EchoHandler) OnRead(c gain.Conn, n int) { _ = "STUB: not implemented"; return }
 
 type HTTPHandler struct {
 	gain.DefaultEventHandler
 }
 
-func (h HTTPHandler) OnRead(conn gain.Conn, n int) {
-	_, err := conn.Discard(n)
-	if err != nil {
-		log.Panic(err)
-	}
-
-	_, err = conn.Write(httpFirstLine)
-	if err != nil {
-		log.Panic(err)
-	}
-
-	_, err = conn.Write([]byte(NowTimeFormat()))
-	if err != nil {
-		log.Panic(err)
-	}
-
-	_, err = conn.Write(httpLastLine)
-	if err != nil {
-		log.Panic(err)
-	}
-}
+func (h HTTPHandler) OnRead(conn gain.Conn, n int) { _ = "STUB: not implemented"; return }
 
 func main() {
 	runtime.GOMAXPROCS(goMaxProcs)

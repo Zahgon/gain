@@ -19,9 +19,6 @@
 package ringbuffer
 
 import (
-	"sort"
-	"sync/atomic"
-
 	"github.com/pawelgaczynski/gain/pkg/buffer/magicring"
 	"github.com/pawelgaczynski/gain/pkg/pool/sync"
 )
@@ -61,98 +58,28 @@ var builtinPool = NewRingBufferPool()
 // Got byte buffer may be returned to the pool via Put call.
 // This reduces the number of memory allocations required for byte buffer
 // management.
-func Get() *RingBuffer { return builtinPool.Get() }
+func Get() *RingBuffer { _ = "STUB: not implemented"; return nil }
 
 // Get returns new byte buffer with zero length.
 //
 // The byte buffer may be returned to the pool via Put after the use
 // in order to minimize GC overhead.
-func (p *Pool) Get() *RingBuffer {
-	v := p.pool.Get()
-	if v != nil {
-		return v
-	}
-
-	buffer := magicring.NewMagicBuffer(int(atomic.LoadUint64(&p.defaultSize)))
-
-	return buffer
-}
+func (p *Pool) Get() *RingBuffer { _ = "STUB: not implemented"; return nil }
 
 // Put returns byte buffer to the pool.
 //
 // RingBuffer mustn't be touched after returning it to the pool,
 // otherwise, data races will occur.
-func Put(b *RingBuffer) {
-	b.Zeroes()
-	builtinPool.Put(b)
-}
+func Put(b *RingBuffer) { _ = "STUB: not implemented"; return }
 
 // Put releases byte buffer obtained via Get to the pool.
 //
 // The buffer mustn't be accessed after returning to the pool.
-func (p *Pool) Put(buffer *RingBuffer) {
-	idx := indexRingBufferPool(buffer.Cap())
-	if atomic.AddUint64(&p.calls[idx], 1) > calibrateCallsThreshold {
-		p.calibrate()
-	}
+func (p *Pool) Put(buffer *RingBuffer) { _ = "STUB: not implemented"; return }
 
-	maxSize := int(atomic.LoadUint64(&p.maxSize))
-	if maxSize == 0 || buffer.Cap() <= maxSize {
-		buffer.Reset()
-		p.pool.Put(buffer)
-	}
-}
+func (p *Pool) calibrate() { _ = "STUB: not implemented"; return }
 
-func (p *Pool) calibrate() {
-	if !atomic.CompareAndSwapUint64(&p.calibrating, 0, 1) {
-		return
-	}
-
-	callData := make(callSizes, 0, steps)
-
-	var callsSum uint64
-
-	for i := uint64(0); i < steps; i++ {
-		calls := atomic.SwapUint64(&p.calls[i], 0)
-		callsSum += calls
-		callData = append(callData, callSize{
-			calls: calls,
-			size:  minSize << i,
-		})
-	}
-	sort.Sort(callData)
-
-	defaultSize := callData[0].size
-	maxSize := defaultSize
-
-	maxSum := uint64(float64(callsSum) * maxPercentile)
-	callsSum = 0
-
-	for i := 0; i < steps; i++ {
-		if callsSum > maxSum {
-			break
-		}
-		callsSum += callData[i].calls
-
-		size := callData[i].size
-		if size > maxSize {
-			maxSize = size
-		}
-	}
-	atomic.StoreUint64(&p.defaultSize, defaultSize)
-	atomic.StoreUint64(&p.maxSize, maxSize)
-
-	atomic.StoreUint64(&p.calibrating, 0)
-}
-
-func NewRingBufferPool() Pool {
-	p := Pool{
-		pool: sync.NewPool[*RingBuffer](),
-	}
-	atomic.StoreUint64(&p.defaultSize, uint64(magicring.DefaultMagicBufferSize))
-
-	return p
-}
+func NewRingBufferPool() Pool { _ = "STUB: not implemented"; return *new(Pool) }
 
 type callSize struct {
 	calls uint64
@@ -161,31 +88,10 @@ type callSize struct {
 
 type callSizes []callSize
 
-func (ci callSizes) Len() int {
-	return len(ci)
-}
+func (ci callSizes) Len() int { _ = "STUB: not implemented"; return 0 }
 
-func (ci callSizes) Less(i, j int) bool {
-	return ci[i].calls > ci[j].calls
-}
+func (ci callSizes) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
 
-func (ci callSizes) Swap(i, j int) {
-	ci[i], ci[j] = ci[j], ci[i]
-}
+func (ci callSizes) Swap(i, j int) { _ = "STUB: not implemented"; return }
 
-func indexRingBufferPool(n int) int {
-	n--
-	n >>= minBitSize
-	idx := 0
-
-	for n > 0 {
-		n >>= 1
-		idx++
-	}
-
-	if idx >= steps {
-		idx = steps - 1
-	}
-
-	return idx
-}
+func indexRingBufferPool(n int) int { _ = "STUB: not implemented"; return 0 }

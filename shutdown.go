@@ -25,26 +25,12 @@ type shutdowner struct {
 	wg          sync.WaitGroup
 }
 
-func (s *shutdowner) markShutdownInProgress() {
-	s.inProgress.Store(true)
-}
+func (s *shutdowner) markShutdownInProgress() { _ = "STUB: not implemented"; return }
 
-func (s *shutdowner) needToShutdown() bool {
-	return s.shutdowning.Load() && !s.inProgress.Load()
-}
+func (s *shutdowner) needToShutdown() bool { _ = "STUB: not implemented"; return false }
 
-func (s *shutdowner) notifyFinish() {
-	if s.shutdowning.Load() {
-		s.wg.Done()
-	}
-}
+func (s *shutdowner) notifyFinish() { _ = "STUB: not implemented"; return }
 
-func (s *shutdowner) shutdown() {
-	s.shutdowning.Store(true)
-	s.wg.Add(1)
-	s.wg.Wait()
-}
+func (s *shutdowner) shutdown() { _ = "STUB: not implemented"; return }
 
-func newShutdowner() *shutdowner {
-	return &shutdowner{}
-}
+func newShutdowner() *shutdowner { _ = "STUB: not implemented"; return nil }

@@ -25,72 +25,23 @@ type connectionManager struct {
 }
 
 func (c *connectionManager) fork(conn *connection, write bool) *connection {
-	key := int(c.keyPool.get())
-
-	forked := getConnection()
-	forked = conn.fork(forked, key, write)
-	c.connections[key] = forked
-	c.connectionsCount.Add(1)
-
-	return forked
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (c *connectionManager) getFd(fd int) *connection {
-	return c.get(fd, fd)
-}
+func (c *connectionManager) getFd(fd int) *connection { _ = "STUB: not implemented"; return nil }
 
-func (c *connectionManager) get(key int, fd int) *connection {
-	conn, ok := c.connections[key]
-	if ok {
-		return conn
-	}
+func (c *connectionManager) get(key int, fd int) *connection { _ = "STUB: not implemented"; return nil }
 
-	conn = getConnection()
-	conn.fd = fd
-	conn.key = key
-	c.connections[key] = conn
-	c.connectionsCount.Add(1)
-
-	return conn
-}
-
-func (c *connectionManager) release(key int) {
-	conn, ok := c.connections[key]
-	if ok {
-		delete(c.connections, key)
-		c.connectionsCount.Add(-1)
-		putConnection(conn)
-		delete(c.releaseFdSet, key)
-		c.keyPool.put(uint64(conn.key))
-	}
-}
+func (c *connectionManager) release(key int) { _ = "STUB: not implemented"; return }
 
 func (c *connectionManager) close(callback func(conn *connection) bool, fdSkipped int) {
-	c.closing = true
-	c.releaseFdSet = make(map[int]void)
-
-	for _, value := range c.connections {
-		if value.fd == fdSkipped {
-			continue
-		}
-
-		if callback(value) {
-			c.releaseFdSet[value.fd] = member
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (c *connectionManager) allClosed() bool {
-	return c.closing && len(c.releaseFdSet) == 0
-}
+func (c *connectionManager) allClosed() bool { _ = "STUB: not implemented"; return false }
 
-func (c *connectionManager) activeConnections() int {
-	return int(c.connectionsCount.Load())
-}
+func (c *connectionManager) activeConnections() int { _ = "STUB: not implemented"; return 0 }
 
-func newConnectionManager() *connectionManager {
-	return &connectionManager{
-		connections: make(map[int]*connection),
-		keyPool:     newKeyPool(),
-	}
-}
+func newConnectionManager() *connectionManager { _ = "STUB: not implemented"; return nil }

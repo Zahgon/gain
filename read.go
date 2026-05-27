@@ -15,7 +15,6 @@
 package gain
 
 import (
-	"github.com/pawelgaczynski/gain/pkg/errors"
 	"github.com/pawelgaczynski/giouring"
 )
 
@@ -24,35 +23,6 @@ type reader struct {
 	recvMsg bool
 }
 
-func (r *reader) addReadRequest(conn *connection) error {
-	entry := r.ring.GetSQE()
-	if entry == nil {
-		return errors.ErrGettingSQE
-	}
+func (r *reader) addReadRequest(conn *connection) error { _ = "STUB: not implemented"; return nil }
 
-	conn.inboundBuffer.GrowIfUnsufficientFreeSpace()
-
-	if r.recvMsg {
-		entry.PrepareRecvMsg(conn.fd, conn.msgHdr, 0)
-		entry.UserData = readDataFlag | uint64(conn.key)
-	} else {
-		entry.PrepareRecv(
-			conn.fd,
-			uintptr(conn.inboundWriteAddress()),
-			uint32(conn.inboundBuffer.Available()),
-			0)
-		entry.UserData = readDataFlag | uint64(conn.fd)
-	}
-
-	conn.state = connRead
-	conn.setKernelSpace()
-
-	return nil
-}
-
-func newReader(ring *giouring.Ring, recvMsg bool) *reader {
-	return &reader{
-		ring:    ring,
-		recvMsg: recvMsg,
-	}
-}
+func newReader(ring *giouring.Ring, recvMsg bool) *reader { _ = "STUB: not implemented"; return nil }

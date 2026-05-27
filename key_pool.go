@@ -15,8 +15,6 @@
 package gain
 
 import (
-	"sync/atomic"
-
 	"github.com/pawelgaczynski/gain/pkg/stack"
 )
 
@@ -27,25 +25,10 @@ type keyPool struct {
 	nextKey uint64
 }
 
-func (p *keyPool) get() uint64 {
-	key := p.stack.Pop()
-	if key == 0 {
-		value := atomic.AddUint64(&p.nextKey, 1) - 1
+func (p *keyPool) get() uint64 { _ = "STUB: not implemented"; return 0 }
 
-		return value
-	}
+func (p *keyPool) put(key uint64) { _ = "STUB: not implemented"; return }
 
-	return key
-}
+func newKeyPool() *keyPool { _ = "STUB: not implemented"; return nil }
 
-func (p *keyPool) put(key uint64) {
-	p.stack.Push(key)
-}
-
-func newKeyPool() *keyPool {
-	return &keyPool{
-		stack: stack.NewLockFreeStack[uint64](),
-		// 0 is invalid key, 1 is reserved for main socket
-		nextKey: firstFreeKey,
-	}
-}
+// 0 is invalid key, 1 is reserved for main socket

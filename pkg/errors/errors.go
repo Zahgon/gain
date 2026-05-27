@@ -17,7 +17,6 @@ package errors
 
 import (
 	"errors"
-	"fmt"
 )
 
 var (
@@ -57,14 +56,8 @@ var (
 	ErrGettingSQE = errors.New("error getting SQE")
 )
 
-func ErrorOpNotAvailableInMode(op, mode string) error {
-	return fmt.Errorf("%w, op: %s, mode: %s", ErrOpNotAvailableInMode, op, mode)
-}
+func ErrorOpNotAvailableInMode(op, mode string) error { _ = "STUB: not implemented"; return nil }
 
-func ErrorUnknownConnectionState(state int) error {
-	return fmt.Errorf("%w, state: %d", ErrUnknownConnectionState, state)
-}
+func ErrorUnknownConnectionState(state int) error { _ = "STUB: not implemented"; return nil }
 
-func ErrorAddressNotFound(fd int) error {
-	return fmt.Errorf("%w, fd: %d", ErrAddressNotFound, fd)
-}
+func ErrorAddressNotFound(fd int) error { _ = "STUB: not implemented"; return nil }

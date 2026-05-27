@@ -15,8 +15,6 @@
 package logger
 
 import (
-	"os"
-
 	"github.com/rs/zerolog"
 )
 
@@ -33,12 +31,6 @@ const (
 )
 
 func NewLogger(component string, level zerolog.Level, pretty bool) zerolog.Logger {
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
-	logger := zerolog.New(os.Stdout).With().Timestamp().Str("component", component).Logger().Level(level)
-
-	if pretty {
-		logger = logger.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-	}
-
-	return logger
+	_ = "STUB: not implemented"
+	return *new(zerolog.Logger)
 }

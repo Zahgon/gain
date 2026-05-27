@@ -15,11 +15,8 @@
 package gain
 
 import (
-	"syscall"
-
 	"github.com/pawelgaczynski/giouring"
 	"github.com/rs/zerolog"
-	"golang.org/x/sys/unix"
 )
 
 type startSignal int
@@ -59,82 +56,32 @@ type workerImpl struct {
 	onCloseHandler func()
 }
 
-func (w *workerImpl) ringFd() int {
-	return w.looper.ring.RingFd()
-}
+func (w *workerImpl) ringFd() int { _ = "STUB: not implemented"; return 0 }
 
-func (w *workerImpl) setIndex(index int) {
-	w.idx = index
-}
+func (w *workerImpl) setIndex(index int) { _ = "STUB: not implemented"; return }
 
-func (w *workerImpl) index() int {
-	return w.idx
-}
+func (w *workerImpl) index() int { _ = "STUB: not implemented"; return 0 }
 
 func (w *workerImpl) processEvent(cqe *giouring.CompletionQueueEvent,
 	skipErrorChecker func(*giouring.CompletionQueueEvent) bool,
 ) bool {
-	w.logDebug().
-		Int32("Res", cqe.Res).
-		Uint64("req key", cqe.UserData & ^allFlagsMask).
-		Uint64("user data", cqe.UserData).
-		Str("req flag", flagToString(cqe.UserData)).
-		Msg("Process event")
-
-	switch {
-	case cqe.Res < 0:
-		if !skipErrorChecker(cqe) {
-			w.logError(nil).
-				Str("error", unix.ErrnoName(-syscall.Errno(cqe.Res))).
-				Str("req flag", flagToString(cqe.UserData)).
-				Uint64("req key", cqe.UserData & ^allFlagsMask).
-				Uint64("user data", cqe.UserData).
-				Msg("worker request returns error code")
-		}
-
-		return true
-
-	case cqe.UserData == 0:
-		w.logError(nil).
-			Msg("user data flag is missing")
-
-		return true
-	}
-
+	_ = "STUB: not implemented"
 	return false
 }
 
-func (w *workerImpl) logDebug() *zerolog.Event {
-	return w.logger.Debug().Int("worker index", w.index()).Int("ring fd", w.ringFd())
-}
+func (w *workerImpl) logDebug() *zerolog.Event { _ = "STUB: not implemented"; return nil }
 
-func (w *workerImpl) logInfo() *zerolog.Event {
-	return w.logger.Info().Int("worker index", w.index()).Int("ring fd", w.ringFd())
-}
+func (w *workerImpl) logInfo() *zerolog.Event { _ = "STUB: not implemented"; return nil }
 
-func (w *workerImpl) logWarn() *zerolog.Event {
-	return w.logger.Warn().Int("worker index", w.index()).Int("ring fd", w.ringFd())
-}
+func (w *workerImpl) logWarn() *zerolog.Event { _ = "STUB: not implemented"; return nil }
 
-func (w *workerImpl) logError(err error) *zerolog.Event {
-	return w.logger.Error().Int("worker index", w.index()).Int("ring fd", w.ringFd()).Err(err)
-}
+func (w *workerImpl) logError(err error) *zerolog.Event { _ = "STUB: not implemented"; return nil }
 
-func (w *workerImpl) close() {
-	if w.looper.ring != nil {
-		w.looper.ring.QueueExit()
-	}
-}
+func (w *workerImpl) close() { _ = "STUB: not implemented"; return }
 
 func newWorkerImpl(
 	ring *giouring.Ring, config workerConfig, index int, logger zerolog.Logger,
 ) *workerImpl {
-	return &workerImpl{
-		logger:      logger,
-		shutdowner:  newShutdowner(),
-		connCloser:  newConnCloser(ring, logger),
-		looper:      newLooper(ring, config.cpuAffinity, config.processPriority, config.maxCQEvents),
-		startedChan: make(chan startSignal),
-		idx:         index,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }

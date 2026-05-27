@@ -15,10 +15,7 @@
 package gain
 
 import (
-	"hash/crc32"
 	"net"
-
-	"github.com/pawelgaczynski/gain/pkg/errors"
 )
 
 type LoadBalancing int
@@ -43,11 +40,7 @@ type genericLoadBalancer struct {
 	size    int
 }
 
-func (b *genericLoadBalancer) register(worker consumer) {
-	worker.setIndex(b.size)
-	b.workers = append(b.workers, worker)
-	b.size++
-}
+func (b *genericLoadBalancer) register(worker consumer) { _ = "STUB: not implemented"; return }
 
 type roundRobinLoadBalancer struct {
 	*genericLoadBalancer
@@ -55,110 +48,58 @@ type roundRobinLoadBalancer struct {
 }
 
 func (b *roundRobinLoadBalancer) next(_ net.Addr) consumer {
-	worker := b.workers[b.nextWorkerIndex]
-
-	if b.nextWorkerIndex++; b.nextWorkerIndex >= b.size {
-		b.nextWorkerIndex = 0
-	}
-
-	return worker
+	_ = "STUB: not implemented"
+	return *new(consumer)
 }
 
 func (b *roundRobinLoadBalancer) forEach(callback func(consumer) error) error {
-	for _, c := range b.workers {
-		err := callback(c)
-		if err != nil {
-			return err
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func newRoundRobinLoadBalancer() loadBalancer {
-	return &roundRobinLoadBalancer{
-		genericLoadBalancer: &genericLoadBalancer{},
-	}
-}
+func newRoundRobinLoadBalancer() loadBalancer { _ = "STUB: not implemented"; return *new(loadBalancer) }
 
 type leastConnectionsLoadBalancer struct {
 	*genericLoadBalancer
 }
 
 func (b *leastConnectionsLoadBalancer) next(_ net.Addr) consumer {
-	worker := b.workers[0]
-	minN := worker.activeConnections()
-
-	for _, v := range b.workers[1:] {
-		if n := v.activeConnections(); n < minN {
-			minN = n
-			worker = v
-		}
-	}
-
-	return worker
+	_ = "STUB: not implemented"
+	return *new(consumer)
 }
 
 func (b *leastConnectionsLoadBalancer) forEach(callback func(consumer) error) error {
-	for _, c := range b.workers {
-		err := callback(c)
-		if err != nil {
-			return err
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func newLeastConnectionsLoadBalancer() loadBalancer {
-	return &leastConnectionsLoadBalancer{
-		genericLoadBalancer: &genericLoadBalancer{},
-	}
+	_ = "STUB: not implemented"
+	return *new(loadBalancer)
 }
 
 type sourceIPHashLoadBalancer struct {
 	*genericLoadBalancer
 }
 
-func (b *sourceIPHashLoadBalancer) hash(s string) int {
-	hash := int(crc32.ChecksumIEEE([]byte(s)))
-	if hash < 0 {
-		return -hash
-	}
-
-	return hash
-}
+func (b *sourceIPHashLoadBalancer) hash(s string) int { _ = "STUB: not implemented"; return 0 }
 
 func (b *sourceIPHashLoadBalancer) next(addr net.Addr) consumer {
-	return b.workers[b.hash(addr.String())%b.size]
+	_ = "STUB: not implemented"
+	return *new(consumer)
 }
 
 func (b *sourceIPHashLoadBalancer) forEach(callback func(consumer) error) error {
-	for _, c := range b.workers {
-		err := callback(c)
-		if err != nil {
-			return err
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func newSourceIPHashLoadBalancer() loadBalancer {
-	return &sourceIPHashLoadBalancer{
-		genericLoadBalancer: &genericLoadBalancer{},
-	}
+	_ = "STUB: not implemented"
+	return *new(loadBalancer)
 }
 
 func createLoadBalancer(loadBalancing LoadBalancing) (loadBalancer, error) {
-	switch loadBalancing {
-	case RoundRobin:
-		return newRoundRobinLoadBalancer(), nil
-	case LeastConnections:
-		return newLeastConnectionsLoadBalancer(), nil
-	case SourceIPHash:
-		return newSourceIPHashLoadBalancer(), nil
-	default:
-		return nil, errors.ErrNotSupported
-	}
+	_ = "STUB: not implemented"
+	return *new(loadBalancer), nil
 }

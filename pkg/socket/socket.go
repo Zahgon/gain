@@ -29,10 +29,12 @@ type Option struct {
 
 // TCPSocket calls the internal tcpSocket.
 func TCPSocket(proto, addr string, passive bool, sockOpts ...Option) (int, net.Addr, error) {
-	return tcpSocket(proto, addr, passive, sockOpts...)
+	_ = "STUB: not implemented"
+	return 0, *new(net.Addr), nil
 }
 
 // UDPSocket calls the internal udpSocket.
 func UDPSocket(proto, addr string, connect bool, sockOpts ...Option) (int, net.Addr, error) {
-	return udpSocket(proto, addr, connect, sockOpts...)
+	_ = "STUB: not implemented"
+	return 0, *new(net.Addr), nil
 }

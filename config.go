@@ -15,7 +15,6 @@
 package gain
 
 import (
-	"runtime"
 	"time"
 
 	"github.com/rs/zerolog"
@@ -96,130 +95,86 @@ type Config struct {
 
 // WithArchitecture sets the architecture of gain engine.
 func WithArchitecture(architecture ServerArchitecture) ConfigOption {
-	return func(c *Config) {
-		c.Architecture = architecture
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithAsyncHandler sets the asynchronous mode for the OnRead callback.
 func WithAsyncHandler(asyncHandler bool) ConfigOption {
-	return func(c *Config) {
-		c.AsyncHandler = asyncHandler
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithGoroutinePool sets the goroutine pool for asynchronous handler.
 func WithGoroutinePool(goroutinePool bool) ConfigOption {
-	return func(c *Config) {
-		c.GoroutinePool = goroutinePool
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithCPUAffinity sets the CPU affinity option.
 func WithCPUAffinity(cpuAffinity bool) ConfigOption {
-	return func(c *Config) {
-		c.CPUAffinity = cpuAffinity
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithProcessPriority sets the high process priority. Note: requires root privileges.
 func WithProcessPriority(processPriority bool) ConfigOption {
-	return func(c *Config) {
-		c.ProcessPriority = processPriority
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithWorkers sets the number of workers.
-func WithWorkers(workers int) ConfigOption {
-	return func(c *Config) {
-		c.Workers = workers
-	}
-}
+func WithWorkers(workers int) ConfigOption { _ = "STUB: not implemented"; return *new(ConfigOption) }
 
 // WithCBPF sets the CBPF filter for the gain engine.
-func WithCBPF(cbpf bool) ConfigOption {
-	return func(c *Config) {
-		c.CBPFilter = cbpf
-	}
-}
+func WithCBPF(cbpf bool) ConfigOption { _ = "STUB: not implemented"; return *new(ConfigOption) }
 
 // WithLoadBalancing sets the load balancing algorithm.
 func WithLoadBalancing(loadBalancing LoadBalancing) ConfigOption {
-	return func(c *Config) {
-		c.LoadBalancing = loadBalancing
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithSocketRecvBufferSize sets the maximum socket receive buffer in bytes.
 func WithSocketRecvBufferSize(size int) ConfigOption {
-	return func(c *Config) {
-		c.SocketRecvBufferSize = size
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithSocketSendBufferSize sets the maximum socket send buffer in bytes.
 func WithSocketSendBufferSize(size int) ConfigOption {
-	return func(c *Config) {
-		c.SocketSendBufferSize = size
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithTCPKeepAlive sets the TCP keep-alive for the socket.
 func WithTCPKeepAlive(tcpKeepAlive time.Duration) ConfigOption {
-	return func(c *Config) {
-		c.TCPKeepAlive = tcpKeepAlive
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithLoggerLevel sets the logging level.
 func WithLoggerLevel(loggerLevel zerolog.Level) ConfigOption {
-	return func(c *Config) {
-		c.LoggerLevel = loggerLevel
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithPrettyLogger sets the pretty-printing zerolog mode.
 func WithPrettyLogger(prettyLogger bool) ConfigOption {
-	return func(c *Config) {
-		c.PrettyLogger = prettyLogger
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithMaxSQEntries sets the maximum number of entries in the submission queue.
 func WithMaxSQEntries(maxSQEntries uint) ConfigOption {
-	return func(c *Config) {
-		c.MaxSQEntries = maxSQEntries
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
 // WithMaxCQEvents sets the maximum number of entries in the completion queue.
 func WithMaxCQEvents(maxCQEvents uint) ConfigOption {
-	return func(c *Config) {
-		c.MaxCQEvents = maxCQEvents
-	}
+	_ = "STUB: not implemented"
+	return *new(ConfigOption)
 }
 
-func NewConfig(opts ...ConfigOption) Config {
-	config := Config{
-		Architecture:         Reactor,
-		AsyncHandler:         false,
-		GoroutinePool:        false,
-		CPUAffinity:          false,
-		ProcessPriority:      false,
-		LoggerLevel:          zerolog.ErrorLevel,
-		PrettyLogger:         false,
-		Workers:              runtime.NumCPU(),
-		CBPFilter:            false,
-		LoadBalancing:        RoundRobin,
-		SocketRecvBufferSize: 0,
-		SocketSendBufferSize: 0,
-		TCPKeepAlive:         0,
-		MaxSQEntries:         defaultMaxSQEntries,
-		MaxCQEvents:          defaultMaxCQEvents,
-	}
-	for _, opt := range opts {
-		opt(&config)
-	}
-
-	return config
-}
+func NewConfig(opts ...ConfigOption) Config { _ = "STUB: not implemented"; return *new(Config) }

@@ -15,56 +15,21 @@
 package gain
 
 import (
-	"github.com/pawelgaczynski/gain/pkg/pool/ringbuffer"
 	"github.com/pawelgaczynski/gain/pkg/pool/sync"
 )
 
 var builtinConnectionPool = newConnectionPool()
 
-func getConnection() *connection {
-	return builtinConnectionPool.Get()
-}
+func getConnection() *connection { _ = "STUB: not implemented"; return nil }
 
-func putConnection(conn *connection) {
-	builtinConnectionPool.Put(conn)
-}
+func putConnection(conn *connection) { _ = "STUB: not implemented"; return }
 
 type connectionPool struct {
 	internalPool sync.Pool[*connection]
 }
 
-func (c *connectionPool) Put(conn *connection) {
-	ringbuffer.Put(conn.inboundBuffer)
-	ringbuffer.Put(conn.outboundBuffer)
-	conn.inboundBuffer = nil
-	conn.outboundBuffer = nil
-	conn.fd = 0
-	conn.key = 0
-	conn.state = 0
-	conn.msgHdr = nil
-	conn.rawSockaddr = nil
-	conn.mode.Store(0)
-	conn.closed.Store(false)
-	conn.network = 0
-	conn.ctx = nil
+func (c *connectionPool) Put(conn *connection) { _ = "STUB: not implemented"; return }
 
-	c.internalPool.Put(conn)
-}
+func (c *connectionPool) Get() *connection { _ = "STUB: not implemented"; return nil }
 
-func (c *connectionPool) Get() *connection {
-	conn := c.internalPool.Get()
-	if conn != nil {
-		conn.inboundBuffer = ringbuffer.Get()
-		conn.outboundBuffer = ringbuffer.Get()
-
-		return conn
-	}
-
-	return newConnection()
-}
-
-func newConnectionPool() *connectionPool {
-	return &connectionPool{
-		internalPool: sync.NewPool[*connection](),
-	}
-}
+func newConnectionPool() *connectionPool { _ = "STUB: not implemented"; return nil }
